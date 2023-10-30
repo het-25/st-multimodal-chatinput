@@ -1,0 +1,15 @@
+MANIFEST.in
+README.md
+setup.py
+multimodal-chatinput/__init__.py
+multimodal-chatinput/frontend/build/asset-manifest.json
+multimodal-chatinput/frontend/build/bootstrap.min.css
+multimodal-chatinput/frontend/build/index.html
+multimodal-chatinput/frontend/build/static/js/main.eb1aa2d6.js
+multimodal-chatinput/frontend/build/static/js/main.eb1aa2d6.js.LICENSE.txt
+multimodal-chatinput/frontend/build/static/js/main.eb1aa2d6.js.map
+st_multimodal_chatinput.egg-info/PKG-INFO
+st_multimodal_chatinput.egg-info/SOURCES.txt
+st_multimodal_chatinput.egg-info/dependency_links.txt
+st_multimodal_chatinput.egg-info/requires.txt
+st_multimodal_chatinput.egg-info/top_level.txt
