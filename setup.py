@@ -13,7 +13,7 @@ setuptools.setup(
     description="Streamlit component that allows you to accept multi-modal inputs through a chat interface.",
     long_description=long_description,
     long_description_content_type="text/markdown",
-    url="",
+    url="https://github.com/het-25/st-multimodal-chatinput",
     packages=setuptools.find_packages(),
     include_package_data=True,
     classifiers=[],
