@@ -1,1 +1,1 @@
-recursive-include multimodal-chatinput/frontend/build *
+recursive-include st_multimodal_chatinput/frontend/build *
