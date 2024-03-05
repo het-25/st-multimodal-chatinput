@@ -2,6 +2,7 @@
 # Streamlit Multimodal Chat Input
 
 A Streamlit component that enables a rich multimodal chat interface, allowing users to input text and upload images within Streamlit applications.
+Demo video at [Streamlit Community Forum](https://discuss.streamlit.io/t/new-component-st-multimodal-chatinput-lets-you-accept-files-through-a-chat-like-interface/54935).
 
 ## Features
 
@@ -20,8 +21,6 @@ pip install st-multimodal-chatinput
 ```
 
 ## Usage instructions
-
-Demo video at [Streamlit Community Forum](https://discuss.streamlit.io/t/new-component-st-multimodal-chatinput-lets-you-accept-files-through-a-chat-like-interface/54935).
 
 ```python
 import streamlit as st
