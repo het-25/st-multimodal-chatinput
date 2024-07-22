@@ -5,8 +5,14 @@ import {
   withStreamlitConnection
 } from "streamlit-component-lib";
 
+interface FileInfo {
+  name: string;
+  type: string;
+  content: string;
+}
+
 interface State {
-  uploadedImages: string[];
+  uploadedFiles: FileInfo[];
   textInput: string;
 }
 
@@ -17,8 +23,8 @@ class MultimodalChatInput extends StreamlitComponentBase<State> {
     cursor: "not-allowed",
   };
 
-  public state = {
-    uploadedImages: [],
+  public state: State = {
+    uploadedFiles: [],
     textInput: "",
   };
 
@@ -26,25 +32,25 @@ class MultimodalChatInput extends StreamlitComponentBase<State> {
     this.setState({ textInput: event.target.value });
   };
 
-  handleImageChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+  handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     this.processFiles(event.target.files);
   };
 
-  handleRemoveImage = (indexToRemove: number) => {
+  handleRemoveFile = (indexToRemove: number) => {
     this.setState(prevState => ({
-      uploadedImages: prevState.uploadedImages.filter((_, index) => index !== indexToRemove)
+      uploadedFiles: prevState.uploadedFiles.filter((_, index) => index !== indexToRemove)
     }));
   };
 
   handleSubmit = () => {
     Streamlit.setComponentValue({
-      images: this.state.uploadedImages,
+      files: this.state.uploadedFiles,
       text: this.state.textInput
     });
 
     // Clear state after sending
     this.setState({
-      uploadedImages: [],
+      uploadedFiles: [],
       textInput: ""
     });
   };
@@ -56,50 +62,55 @@ class MultimodalChatInput extends StreamlitComponentBase<State> {
     for (let i = 0; i < items.length; i++) {
       if (items[i].type.startsWith("image")) {
         const blob = items[i].getAsFile();
-        if (blob) { // Ensure blob is not null before proceeding
-          const reader = new FileReader();
-
-          reader.onloadend = () => {
-            this.setState(prevState => ({
-              uploadedImages: [...prevState.uploadedImages, reader.result as string]
-            }));
-          };
-          reader.readAsDataURL(blob);
+        if (blob) {
+          this.processFile(blob);
           event.preventDefault(); // Prevent the image from being pasted as text
         }
       }
     }
   };
 
-
   processFiles = (files: FileList | null) => {
     if (!files) return;
 
-    Array.from(files).forEach(file => {
-      const reader = new FileReader();
-      reader.onloadend = () => {
-        this.setState(prevState => ({
-          uploadedImages: [...prevState.uploadedImages, reader.result as string]
-        }));
+    Array.from(files).forEach(this.processFile);
+  };
+
+  processFile = (file: File) => {
+    const reader = new FileReader();
+    reader.onloadend = () => {
+      const fileInfo: FileInfo = {
+        name: file.name,
+        type: file.type,
+        content: reader.result as string
       };
-      reader.readAsDataURL(file);
-    });
+      this.setState(prevState => ({
+        uploadedFiles: [...prevState.uploadedFiles, fileInfo]
+      }));
+    };
+    reader.readAsDataURL(file);
   };
 
   public render = (): ReactNode => {
     const disabled = this.props.args["disabled"]
-    const isdisabled = this.props.disabled || disabled;
+    const isDisabled = this.props.disabled || disabled;
     const width = this.props.width
 
     return (
       <div style={{ position: "relative", display: "flex", flexDirection: "column", border: "1px solid gray", borderRadius: "8px", padding: "8px", width: width }} >
 
-        {/* Uploaded Images Staging */}
+        {/* Uploaded Files Staging */}
         <div style={{ marginBottom: "5px" }}>
-          {this.state.uploadedImages.map((image, index) => (
-            <div key={index} aria-disabled={this.props.disabled || disabled} style={{ position: "relative", display: "inline-block", margin: "5px", transition: "0.3s", borderRadius: "5px", overflow: "hidden" }}>
-              <img src={image} alt="Uploaded preview" style={{ width: "50px", height: "50px" }} />
-              <button disabled={isdisabled} onClick={() => this.handleRemoveImage(index)} style={{ position: "absolute", top: 0, right: 0, background: "red", color: "white", borderRadius: "50%", width: "15px", height: "15px", fontSize: "10px", display: "flex", alignItems: "center", justifyContent: "center", ...(isdisabled ? this.disabledStyle : {}) }}>
+          {this.state.uploadedFiles.map((file, index) => (
+            <div key={index} aria-disabled={isDisabled} style={{ position: "relative", display: "inline-block", margin: "5px", transition: "0.3s", borderRadius: "5px", overflow: "hidden" }}>
+              <div style={{ width: "50px", height: "50px", display: "flex", alignItems: "center", justifyContent: "center", backgroundColor: "#f0f0f0", color: "#333" }}>
+                {file.type.startsWith("image") ? (
+                  <img src={file.content} alt="Uploaded preview" style={{ width: "100%", height: "100%", objectFit: "cover" }} />
+                ) : (
+                  file.name.split('.').pop()?.toUpperCase()
+                )}
+              </div>
+              <button disabled={isDisabled} onClick={() => this.handleRemoveFile(index)} style={{ position: "absolute", top: 0, right: 0, background: "red", color: "white", borderRadius: "50%", width: "15px", height: "15px", fontSize: "10px", display: "flex", alignItems: "center", justifyContent: "center", ...(isDisabled ? this.disabledStyle : {}) }}>
                 ×
               </button>
             </div>
@@ -108,23 +119,22 @@ class MultimodalChatInput extends StreamlitComponentBase<State> {
 
         {/* Chat Input Area */}
         <div style={{ display: "flex", alignItems: "center" }}>
-          {/* Image Upload Button */}
-          <label style={{ marginRight: "10px", ...(isdisabled ? this.disabledStyle : {}) }}>
+          {/* File Upload Button */}
+          <label style={{ marginRight: "10px", ...(isDisabled ? this.disabledStyle : {}) }}>
             📎
-            <input disabled={isdisabled} type="file" accept="image/*" multiple onChange={this.handleImageChange} style={{ display: "none" }} />
+            <input disabled={isDisabled} type="file" accept="image/*,.pdf,.docx,.xlsx" multiple onChange={this.handleFileChange} style={{ display: "none" }} />
           </label>
 
           {/* Textarea for Chat */}
           <textarea
-            disabled={isdisabled}
+            disabled={isDisabled}
             value={this.state.textInput}
             onChange={this.handleInputChange}
             onPaste={this.handlePaste}
             placeholder="Type a message..."
-            style={{ flexGrow: 1, padding: "8px", borderRadius: "8px", border: "1px solid gray", backgroundColor: "transparent", resize: "none", overflow: "auto", color: "white", ...(isdisabled ? this.disabledStyle : {}) }}
+            style={{ flexGrow: 1, padding: "8px", borderRadius: "8px", border: "1px solid gray", backgroundColor: "transparent", resize: "none", overflow: "auto", color: "white", ...(isDisabled ? this.disabledStyle : {}) }}
             onKeyDown={e => {
               if (e.key === "Enter" && !e.shiftKey) {
-                // Only ENTER -> Emulate send button press
                 e.preventDefault();
                 this.handleSubmit();
               }
@@ -132,7 +142,7 @@ class MultimodalChatInput extends StreamlitComponentBase<State> {
           />
 
           {/* Send Button */}
-          <button disabled={isdisabled} onClick={this.handleSubmit} style={{ marginLeft: "10px", padding: "5px 10px", borderRadius: "50%", backgroundColor: "#6200ea", color: "#ffffff", ...(isdisabled ? this.disabledStyle : {}) }}>
+          <button disabled={isDisabled} onClick={this.handleSubmit} style={{ marginLeft: "10px", padding: "5px 10px", borderRadius: "50%", backgroundColor: "#6200ea", color: "#ffffff", ...(isDisabled ? this.disabledStyle : {}) }}>
             ➤
           </button>
         </div>

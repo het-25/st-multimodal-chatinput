@@ -29,9 +29,24 @@ from st_multimodal_chatinput import multimodal_chatinput
 
 chatinput = multimodal_chatinput()
 
-uploaded_images = chatinput["uploadedImages"] ##list of base64 encodings of uploaded images
+uploaded_files = chatinput["uploadedFiles"] ##list of base64 encodings of uploaded files
 text = chatinput["textInput"] ##submitted text
+for file in uploaded_files:
+    filename = file["name"]
+    filetype = file["type"] ## MIME type of the uploaded file
+    filecontent = file["content"] ## base 64 encoding of the uploaded file
 ```
+
+## Common MIME types
+
+| File Extension | MIME Type |
+| -------------- | --------- |
+| .pdf           | application/pdf |
+| .doc          | application/msword |
+| .csv          | text/csv |
+
+You can find other common types [here](https://developer.mozilla.org/en-US/docs/Web/HTTP/Basics_of_HTTP/MIME_types/Common_types).
+
 
 ## Contributing
 
