@@ -7,7 +7,7 @@ long_description = (this_directory / "README.md").read_text()
 
 setuptools.setup(
     name="st-multimodal-chatinput",
-    version="0.1.6",
+    version="0.2.0",
     author="Het Patel",
     author_email="2522het.patel@gmail.com",
     description="Streamlit component that allows you to accept multi-modal inputs through a chat interface.",

@@ -3,3 +3,4 @@ dist/
 node_modules/
 node/
 st_multimodal_chatinput.egg-info/
+.DS_Store
