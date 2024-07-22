@@ -2,7 +2,7 @@ import os
 import streamlit.components.v1 as components
 import base64
 
-_RELEASE = True
+_RELEASE = False
 
 if not _RELEASE:
     _component_func = components.declare_component(
@@ -38,6 +38,7 @@ def multimodal_chatinput(default=None, disabled=False, key=None):
         A dictionary with the following structure:
         {
             'uploadedFiles': list of dictionaries containing file information,
+            'uploadedImages': list of base64 encoding of uploaded images (for backward compatibility),
             'textInput': str
         }
         Each file dictionary in 'uploadedFiles' has the following structure:
@@ -46,8 +47,17 @@ def multimodal_chatinput(default=None, disabled=False, key=None):
             'type': str (MIME type),
             'content': str (base64 encoded file content)
         }
+        'uploadedImages' contains only the base64 encoded content of image files.
         'textInput' is a string representing the current text input.
     """
     component_value = _component_func(disabled=disabled, default=default)
+    
+    # Ensure backward compatibility for uploadedImages
+    if 'uploadedFiles' in component_value:
+        component_value['uploadedImages'] = [
+            file['content'] for file in component_value['uploadedFiles']
+            if file['type'].startswith('image/')
+        ]
+        
 
     return component_value

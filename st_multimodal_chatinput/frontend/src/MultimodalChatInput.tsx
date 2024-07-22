@@ -44,8 +44,8 @@ class MultimodalChatInput extends StreamlitComponentBase<State> {
 
   handleSubmit = () => {
     Streamlit.setComponentValue({
-      files: this.state.uploadedFiles,
-      text: this.state.textInput
+      uploadedFiles: this.state.uploadedFiles,
+      textInput: this.state.textInput
     });
 
     // Clear state after sending

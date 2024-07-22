@@ -29,7 +29,8 @@ from st_multimodal_chatinput import multimodal_chatinput
 
 chatinput = multimodal_chatinput()
 
-uploaded_files = chatinput["uploadedFiles"] ##list of base64 encodings of uploaded files
+uploaded_files = chatinput["uploadedFiles"] ##list of ALL uploaded files (including images) along with type, name, and content.
+uploaded_images = chatinput["uploadedImages"] ## list of base 64 encoding of uploaded images
 text = chatinput["textInput"] ##submitted text
 for file in uploaded_files:
     filename = file["name"]
