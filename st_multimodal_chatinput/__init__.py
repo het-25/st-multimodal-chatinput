@@ -2,7 +2,7 @@ import os
 import streamlit.components.v1 as components
 import base64
 
-_RELEASE = False
+_RELEASE = True
 
 if not _RELEASE:
     _component_func = components.declare_component(
@@ -53,11 +53,9 @@ def multimodal_chatinput(default=None, disabled=False, key=None):
     component_value = _component_func(disabled=disabled, default=default)
     
     # Ensure backward compatibility for uploadedImages
-    if 'uploadedFiles' in component_value:
+    if component_value is not None and 'uploadedFiles' in component_value:
         component_value['uploadedImages'] = [
             file['content'] for file in component_value['uploadedFiles']
             if file['type'].startswith('image/')
         ]
-        
-
     return component_value

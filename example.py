@@ -31,4 +31,3 @@ with st.container():
 
 if user_inp:
     st.write(user_inp)
-
