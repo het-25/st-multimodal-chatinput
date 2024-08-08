@@ -93,7 +93,7 @@ class MultimodalChatInput extends StreamlitComponentBase<State> {
 
   public render = (): ReactNode => {
     const disabled = this.props.args["disabled"]
-    const placeholder = this.progs.args["placeholder"]
+    const placeholder = this.props.args["placeholder"]
     const isDisabled = this.props.disabled || disabled;
     const width = this.props.width
 
