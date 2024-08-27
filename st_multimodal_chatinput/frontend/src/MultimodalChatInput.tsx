@@ -93,6 +93,7 @@ class MultimodalChatInput extends StreamlitComponentBase<State> {
 
   public render = (): ReactNode => {
     const disabled = this.props.args["disabled"]
+    const placeholder = this.props.args["placeholder"]
     const isDisabled = this.props.disabled || disabled;
     const width = this.props.width
 
@@ -131,7 +132,7 @@ class MultimodalChatInput extends StreamlitComponentBase<State> {
             value={this.state.textInput}
             onChange={this.handleInputChange}
             onPaste={this.handlePaste}
-            placeholder="Type a message..."
+            placeholder={placeholder}
             style={{ flexGrow: 1, padding: "8px", borderRadius: "8px", border: "1px solid gray", backgroundColor: "transparent", resize: "none", overflow: "auto", color: "white", ...(isDisabled ? this.disabledStyle : {}) }}
             onKeyDown={e => {
               if (e.key === "Enter" && !e.shiftKey) {

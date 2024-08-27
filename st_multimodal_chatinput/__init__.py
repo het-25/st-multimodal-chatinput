@@ -14,7 +14,7 @@ else:
     build_dir = os.path.join(parent_dir, "frontend/build")
     _component_func = components.declare_component("st_multimodal_chatinput", path=build_dir)
 
-def multimodal_chatinput(default=None, disabled=False, key=None):
+def multimodal_chatinput(default=None, disabled=False, key=None, placeholder="Ask me anything.."):
     """
     Create and return a new instance of the "multimodal_chatinput" component.
 
@@ -50,7 +50,7 @@ def multimodal_chatinput(default=None, disabled=False, key=None):
         'uploadedImages' contains only the base64 encoded content of image files.
         'textInput' is a string representing the current text input.
     """
-    component_value = _component_func(disabled=disabled, default=default)
+    component_value = _component_func(disabled=disabled, default=default, placeholder=placeholder)
     
     # Ensure backward compatibility for uploadedImages
     if component_value is not None and 'uploadedFiles' in component_value:
