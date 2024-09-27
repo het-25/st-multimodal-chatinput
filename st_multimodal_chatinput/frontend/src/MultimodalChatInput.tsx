@@ -23,6 +23,8 @@ class MultimodalChatInput extends StreamlitComponentBase<State> {
     cursor: "not-allowed",
   };
 
+  private fileInputRef = React.createRef<HTMLInputElement>();
+
   public state: State = {
     uploadedFiles: [],
     textInput: "",
@@ -34,6 +36,10 @@ class MultimodalChatInput extends StreamlitComponentBase<State> {
 
   handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     this.processFiles(event.target.files);
+
+    if (this.fileInputRef.current) {
+      this.fileInputRef.current.value = "";  // Reset the file input to allow same file selection
+    }
   };
 
   handleRemoveFile = (indexToRemove: number) => {
@@ -53,6 +59,11 @@ class MultimodalChatInput extends StreamlitComponentBase<State> {
       uploadedFiles: [],
       textInput: ""
     });
+
+    // Reset the file input after submission
+    if (this.fileInputRef.current) {
+      this.fileInputRef.current.value = "";
+    }
   };
 
   handlePaste = (event: React.ClipboardEvent<HTMLTextAreaElement>) => {
@@ -92,10 +103,10 @@ class MultimodalChatInput extends StreamlitComponentBase<State> {
   };
 
   public render = (): ReactNode => {
-    const disabled = this.props.args["disabled"]
-    const placeholder = this.props.args["placeholder"]
+    const disabled = this.props.args["disabled"];
+    const placeholder = this.props.args["placeholder"];
     const isDisabled = this.props.disabled || disabled;
-    const width = this.props.width
+    const width = this.props.width;
 
     return (
       <div style={{ position: "relative", display: "flex", flexDirection: "column", border: "1px solid gray", borderRadius: "8px", padding: "8px", width: width }} >
@@ -123,7 +134,15 @@ class MultimodalChatInput extends StreamlitComponentBase<State> {
           {/* File Upload Button */}
           <label style={{ marginRight: "10px", ...(isDisabled ? this.disabledStyle : {}) }}>
             📎
-            <input disabled={isDisabled} type="file" accept="image/*,.pdf,.docx,.xlsx" multiple onChange={this.handleFileChange} style={{ display: "none" }} />
+            <input
+              disabled={isDisabled}
+              ref={this.fileInputRef}  // Reference the input element
+              type="file"
+              accept="image/*,.pdf,.docx,.xlsx"
+              multiple
+              onChange={this.handleFileChange}
+              style={{ display: "none" }}
+            />
           </label>
 
           {/* Textarea for Chat */}
