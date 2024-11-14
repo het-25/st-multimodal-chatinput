@@ -50,7 +50,7 @@ def multimodal_chatinput(default=None, disabled=False, key=None, placeholder="As
         'uploadedImages' contains only the base64 encoded content of image files.
         'textInput' is a string representing the current text input.
     """
-    component_value = _component_func(disabled=disabled, default=default, placeholder=placeholder)
+    component_value = _component_func(disabled=disabled, default=default, placeholder=placeholder, key=key)
     
     # Ensure backward compatibility for uploadedImages
     if component_value is not None and 'uploadedFiles' in component_value:
