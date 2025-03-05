@@ -1,8 +1,8 @@
 
 # Streamlit Multimodal Chat Input
 
-A Streamlit component that enables a rich multimodal chat interface, allowing users to input text and upload images within Streamlit applications.
-Demo video at [Streamlit Community Forum](https://discuss.streamlit.io/t/new-component-st-multimodal-chatinput-lets-you-accept-files-through-a-chat-like-interface/54935).
+A Streamlit component that enables a multimodal chat interface, allowing users to input text and upload images within Streamlit applications.
+Demo video at [Streamlit Community Forum](https://discuss.streamlit.io/t/new-component-st-multimodal-chatinput-lets-you-accept-files-through-a-chat-like-interface/54935) (can't believe they didn't make this themselves in the age of multimodal LLMs & RAG systems). 
 
 ## Features
 
